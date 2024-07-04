@@ -1,0 +1,5 @@
+.env
+openai-env/
+.DS_Store
+*test.py
+test_json.py
