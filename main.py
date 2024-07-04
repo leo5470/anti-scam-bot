@@ -10,13 +10,10 @@ app = FastAPI()
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 
-# 指定函數處理來自 /callback 路徑的 POST 請求。
-# 使用 post 表示這個端點只接受HTTP POST方法的請
-# 求，這是API通常接收數據的方式。
-# @app.post("/callback")
 
 
-@app.post("/webhooks/line")
+
+@app.post("/")
 # callback功能：用來回應特定事件或請求。
 async def callback(request: Request):
     # FastAPI框架，回傳一個包含整個請求text的bytes
