@@ -11,6 +11,7 @@ app = FastAPI()
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 
+# test
 def query_openai(prompt):
     api_key = os.environ['OPENAI_API_KEY']
     headers = {
