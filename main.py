@@ -3,6 +3,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import TextSendMessage
 import os
+import requests
 
 # the main entrypoint to use FastAPI.
 app = FastAPI()
@@ -10,9 +11,29 @@ app = FastAPI()
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 
+def query_openai(prompt):
+    api_key = os.environ['OPENAI_API_KEY']
+    headers = {
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json',
+    }
+    data = {
+        'prompt': prompt,
+        'max_tokens': 150,
+        'model': 'text-davinci-002'  # 或其他您有权限使用的模型
+    }
+    # 傳送 HTTP POST 請求到 OpenAI 的 API
+    response = requests.post(
+        'https://api.openai.com/v1/engines/davinci/completions', 
+        json=data, 
+        headers=headers)
+    # 從API獲得的回覆，轉換成json
+    response_json = response.json()
+    return response_json['choices'][0]['text']
 
-
-
+# 指定函數處理來自/路徑的 POST 請求。
+# 使用 post 表示這個端點只接受HTTP POST方法的請
+# 求，這是API通常接收數據的方式。
 @app.post("/")
 # callback功能：用來回應特定事件或請求。
 async def callback(request: Request):
@@ -51,10 +72,13 @@ async def callback(request: Request):
     reply_token = json_data['events'][0]['replyToken']
     user_message = json_data['events'][0]['message']['text']
 
+    # 使用OpenAI GPT自動回覆
+    gpt_response = query_openai(user_message)
+
     # 回應用戶訊息
     line_bot_api.reply_message(
         reply_token, # 指定回應發送到哪個對話
-        TextSendMessage(text=f"Echo: {user_message}")
+        TextSendMessage(text=gpt_response)
     )
 
     # 返回一個字典，表明請求已經被正確處理。在FastAPI中，這會自動被轉換為JSON格式的HTTP響應，返回給調用方。
