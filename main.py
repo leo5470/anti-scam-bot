@@ -2,11 +2,12 @@ from fastapi import FastAPI, Request, HTTPException
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import TextSendMessage
+from openai import OpenAI
 import os
-import requests
 
 # the main entrypoint to use FastAPI.
 app = FastAPI()
+client = OpenAI()
 
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
@@ -14,23 +15,17 @@ handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 # test
 def query_openai(prompt):
     api_key = os.environ['OPENAI_API_KEY']
-    headers = {
-        'Authorization': f'Bearer {api_key}',
-        'Content-Type': 'application/json',
-    }
-    data = {
-        'prompt': prompt,
-        'max_tokens': 150,
-        'model': 'text-davinci-002'  # 或其他您有权限使用的模型
-    }
-    # 傳送 HTTP POST 請求到 OpenAI 的 API
-    response = requests.post(
-        'https://api.openai.com/v1/engines/davinci/completions', 
-        json=data, 
-        headers=headers)
-    # 從API獲得的回覆，轉換成json
-    response_json = response.json()
-    return response_json['choices'][0]['text']
+    
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages = [
+            {
+                "role": "user",
+                "content": prompt 
+            }
+        ]
+    )
+    return completion.choices[0].message
 
 # 指定函數處理來自/路徑的 POST 請求。
 # 使用 post 表示這個端點只接受HTTP POST方法的請
