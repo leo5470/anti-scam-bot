@@ -14,7 +14,7 @@ handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 
 # test
 def query_openai(prompt):
-    api_key = os.environ['OPENAI_API_KEY']
+    # api_key = os.environ['OPENAI_API_KEY']
     
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -25,7 +25,7 @@ def query_openai(prompt):
             }
         ]
     )
-    return completion.choices[0].message
+    return completion.choices[0].message.content
 
 # 指定函數處理來自/路徑的 POST 請求。
 # 使用 post 表示這個端點只接受HTTP POST方法的請
