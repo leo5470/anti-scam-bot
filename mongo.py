@@ -24,7 +24,7 @@ class MongoDBClient:
 
     def newUser(self, userID):
         document = self.findByUserID(userID)
-        if document == None:
+        if document != None:
             return
         new_document = {
         "user_id": userID,  # Replace with your desired id
