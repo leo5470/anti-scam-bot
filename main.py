@@ -76,8 +76,9 @@ def handle_message(event):
                 )
                 for name in groupNames
             ]
-            template = CarouselTemplate(columns)
+            template = CarouselTemplate(columns=columns)
             messages = [TemplateMessage(altText="Groups", template=template)]
+            suggestFlag = True
         else: 
             if suggestFlag:
                 history = "你正在接受測試"
