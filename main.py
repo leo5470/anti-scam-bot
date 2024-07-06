@@ -61,7 +61,7 @@ def handle_message(event):
             groupNames = ["group 1", "group 2"]
             columns = [
                 CarouselColumn(
-                    thumbnail_image_url='./resources/group.png',
+                    thumbnail_image_url='https://cdn.prod.website-files.com/6030eb20edb267a2d11d31f6/63bd0e73eda88718096a822c_ConceptsLINEGroupCoverImage_a76a181134deb7c405b39e6803a648c8_2000.png',
                     text=name,
                     default_action=MessageAction(
                             label="選擇",
