@@ -19,12 +19,17 @@ from linebot.v3.messaging import (
 )
 from linebot.v3.webhooks import (
     MessageEvent,
-    TextMessageContent
+    TextMessageContent,
+    FollowEvent,
+    JoinEvent
 )
 
 from openaiFunc import query_openai
+from mongo import MongoDBClient
 
 import os
+
+client = MongoDBClient()
 
 app = Flask(__name__)
 
@@ -51,13 +56,24 @@ def callback():
 
     return 'OK'
 
+@handler.add(FollowEvent)
+def handle_add_friend(event):
+    userID = event.source.userId
+    MongoDBClient.newUser(userID)
+
+# @handler.add(JoinEvent)
+# def handle_join_group(event):
+#     groupID = event.source.groupId
+
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     with ApiClient(configuration) as api_client:
-        incoming = event.message.text
+        incomingMessage = event.message.text
+        # if(event.source.type == "group"):
+            
 
-        if incoming == "\提示":
+        if incomingMessage == "/提示":
             groupNames = ["group 1", "group 2"]
             columns = [
                 CarouselColumn(
