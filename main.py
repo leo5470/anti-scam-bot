@@ -58,7 +58,7 @@ def callback():
 
 @handler.add(FollowEvent)
 def handle_add_friend(event):
-    userID = event.source.userId
+    userID = event.source.user_id
     MongoDBClient.newUser(userID)
 
 # @handler.add(JoinEvent)
