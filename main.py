@@ -11,7 +11,11 @@ from linebot.v3.messaging import (
     ApiClient,
     MessagingApi,
     ReplyMessageRequest,
-    TextMessage
+    TextMessage,
+    TemplateMessage,
+    CarouselTemplate,
+    CarouselColumn,
+    MessageAction,
 )
 from linebot.v3.webhooks import (
     MessageEvent,
@@ -26,6 +30,8 @@ app = Flask(__name__)
 
 configuration = Configuration(access_token=os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
+
+suggestFlag = False
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -51,15 +57,39 @@ def handle_message(event):
     with ApiClient(configuration) as api_client:
         incoming = event.message.text
 
-        # DEBUG
-        app.logger.info("Handling message: " + incoming)
-
-        ans = query_openai(incoming)
+        if incoming == "\提示":
+            groupNames = []
+            columns = [
+                CarouselColumn(
+                    thumbnail_image_url='./resources/group.png',
+                    text=name,
+                    default_action=MessageAction(
+                            label="選擇",
+                            text=name
+                        ),
+                    actions=[
+                        MessageAction(
+                            label="選擇",
+                            text=name
+                        ),
+                    ]
+                )
+                for name in groupNames
+            ]
+            template = CarouselTemplate(columns)
+            messages = [TemplateMessage(altText="Groups", template=template)]
+        else: 
+            if suggestFlag:
+                history = "你正在接受測試"
+                ans = query_openai(history) # TODO: change parameters
+            else:
+                ans = "請依照指示使用！"
+            messages = [TextMessage(text=ans)]
         line_bot_api = MessagingApi(api_client)
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
-                messages=[TextMessage(text=ans)]
+                messages=messages
             )
         )
 
