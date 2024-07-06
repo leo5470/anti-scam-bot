@@ -4,7 +4,7 @@ import asyncio
 client = AsyncOpenAI(api_key="EMPTY", base_url="http://140.112.26.229:8000/v1/")
 
 
-async def query_openai(systemPrompt, prompt, top_p=0.7, max_tokens=512, temperature=0.95):
+async def query_openai(prompt, systemPrompt="你是一名幫助人類的助手", top_p=0.7, max_tokens=512, temperature=0.95):
     # api_key = os.environ['OPENAI_API_KEY']
     
     completion = await client.chat.completions.create(
