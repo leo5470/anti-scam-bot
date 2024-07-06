@@ -58,7 +58,7 @@ def handle_message(event):
         incoming = event.message.text
 
         if incoming == "\提示":
-            groupNames = []
+            groupNames = ["group 1", "group 2"]
             columns = [
                 CarouselColumn(
                     thumbnail_image_url='./resources/group.png',
