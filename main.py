@@ -50,9 +50,9 @@ def callback():
 def handle_message(event):
     with ApiClient(configuration) as api_client:
         incoming = event.message.text
-        # DEBUG
 
-        print(incoming)
+        # DEBUG
+        app.logger.info("Handling message: " + incoming)
 
         ans = query_openai(incoming)
         line_bot_api = MessagingApi(api_client)
