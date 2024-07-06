@@ -2,34 +2,15 @@ from fastapi import FastAPI, Request, HTTPException
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import TextSendMessage
-from openai import OpenAI
+from openaiFunc import query_openai
 import os
 
 # the main entrypoint to use FastAPI.
 app = FastAPI()
-client = OpenAI()
+
 
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
-
-# test
-def query_openai(prompt):
-    # api_key = os.environ['OPENAI_API_KEY']
-    
-    completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages = [
-            {
-                "role": "system",
-                "content": "你是一名台灣的反詐騙專家，非常擅長分析並識破詐騙訊息，例如投資詐騙，綁架詐騙等。你會以親切、自然而不冗長的方式詢問使用者更完善的資料後，一步步判別訊息是否為詐騙，在這之中，你也需要扮演心理諮商師的角色，緩慢而親切的詢問對方，在使用者執迷不悟的時候，適度、平靜且充滿耐心地提示他們，也需要顧及使用者的顏面。請務必做好你反詐騙專家的工作，並請先一個問題一個問題慢慢的詢問更多細節，足夠判定是否為詐騙的時候給出答案。你需要平靜的對於你所獲得的訊息進行分析，並且需要一步步的，一次一個問題，慢慢地向使用者追問細節，你可以預期使用者會針對你的問題回答，所以一次一個問題就好，來形成一問一答的形式。你可以在這樣一問一答的過程當中，利用如詐騙集團的角度思考，對使用者進行反問，像是在投資詐騙中，你可以反問使用者「既然這麼好賺到錢的話，為什麼還要分享給完全不認識的人，而不是自己私吞就好？」。問答直到你能夠初步判斷後，就可以給出所需要的答案。在確認合法性和是不是詐騙的時候，你可以進行進一步詢問，也可以請對方「打165反詐騙專線」進行確認。這對於增進社會福祉相當重要，請務必做好你反詐騙專家的工作，並提示有關「165反詐騙專線」的資訊，謝謝你的合作。"
-            },
-            {
-                "role": "user",
-                "content": prompt 
-            }
-        ]
-    )
-    return completion.choices[0].message.content
 
 # 指定函數處理來自/路徑的 POST 請求。
 # 使用 post 表示這個端點只接受HTTP POST方法的請
