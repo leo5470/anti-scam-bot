@@ -72,7 +72,7 @@ def handle_join_group(event):
     with ApiClient(configuration) as api_client:
         line_bot_api = MessagingApi(api_client)
         groupID = event.source.group_id
-        group_summary = line_bot_api.get_group_summary(id).to_dict
+        group_summary = line_bot_api.get_group_summary(groupID).to_dict
         groupName = group_summary["groupName"]
         client.insertGroup(groupID, groupName)
 
