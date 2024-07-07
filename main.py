@@ -33,6 +33,10 @@ from mongo import MongoDBClient
 import os
 from pathlib import Path
 
+# If you need to run from local (ngrok or others), uncomment the following 2 lines.
+# from dotenv import load_dotenv
+# load_dotenv()
+
 client = MongoDBClient()
 
 app = Flask(__name__)
@@ -134,34 +138,47 @@ def handle_message(event):
                     messages = [TextMessage(text=ans)]
                 else:
                     ans = query_vertexAI(suggestPrompt, history)
-                    client.updateSuggestHistory(userID, ans)
-                    columns = [
-                        CarouselColumn(
-                            thumbnail_image_url='https://cdn.prod.website-files.com/6030eb20edb267a2d11d31f6/63bd0e73eda88718096a822c_ConceptsLINEGroupCoverImage_a76a181134deb7c405b39e6803a648c8_2000.png',
-                            text="有關於提示的任何問題，可以按下面的「進行提示詢問」開始詢問！",
-                            default_action=MessageAction(
-                                    label="進行提示詢問", # TODO: change
-                                    text="/提示詢問"
-                                ),
-                            actions=[
-                                MessageAction(
-                                    label="進行提示詢問", # TODO: change
-                                    text="/提示詢問"
-                                ),
-                            ]
-                        )
-                    ]
+                    if ans == "":
+                        ans = "出了一點問題，導致無法輸出內容。也有可能是訊息還太短，導致無法生成，可以再試一次。"
+                        messages = [TextMessage(text=ans)]
+                    else:
+                        client.updateSuggestHistory(userID, ans)
+                        columns = [
+                            CarouselColumn(
+                                thumbnail_image_url='https://cdn.prod.website-files.com/6030eb20edb267a2d11d31f6/63bd0e73eda88718096a822c_ConceptsLINEGroupCoverImage_a76a181134deb7c405b39e6803a648c8_2000.png',
+                                text="有關於提示的任何問題，可以按下面的「進行詢問」開始詢問！",
+                                default_action=MessageAction(
+                                        label="進行詢問", # TODO: change
+                                        text="/詢問"
+                                    ),
+                                actions=[
+                                    MessageAction(
+                                        label="進行詢問", # TODO: change
+                                        text="/詢問"
+                                    ),
+                                ]
+                            )
+                        ]
+                        template = CarouselTemplate(columns=columns)
+                        messages = [TextMessage(text=ans), TemplateMessage(altText="Ask Suggestion", template=template)]
                 client.setSuggestFlag(userID, False)
-        elif incomingMessage == "/提示詢問":
+        elif incomingMessage == "/詢問":
             suggest = client.getLatestSuggest(userID)
             client.updateChatHistory(userID, user=None, assistant=suggest)
             ans = "請開始詢問"
+            messages = [TextMessage(text=ans)]
+        elif incomingMessage == "/清空":
+            client.clearChatHistory(userID)
+            ans = "清空聊天記錄完畢！"
             messages = [TextMessage(text=ans)]
         else:
             client.updateChatHistory(userID, user=incomingMessage, assistant=None)
             history = client.getChatHistory(userID)
             ans = query_vertexAI(qaPrompt, history)
-            client.updateChatHistory(userID, user=None, assistant=ans)
+            if ans == "":
+                ans = "出了一點問題，導致無法輸出內容。也有可能是訊息太短，可以在加長後再試一次。"
+            else:
+                client.updateChatHistory(userID, user=None, assistant=ans)
             messages = [TextMessage(text=ans)]
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
@@ -171,4 +188,4 @@ def handle_message(event):
         )
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", port="8080")

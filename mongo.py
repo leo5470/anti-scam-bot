@@ -77,14 +77,14 @@ class MongoDBClient:
         if groupName != None:
             document = self.findByGroupName(groupName)
         else:
-            document = self.findByGroupName(groupID)
+            document = self.findByGroupID(groupID)
         if document == None:
             return None
         userID = document["owner"]
         groupID = document["group_id"]
         user_document = self.findByUserID(userID)
         chatList = user_document["groups"][groupID]
-        chatList_json = json.dumps(chatList)
+        chatList_json = json.dumps(chatList, ensure_ascii=False)
         return chatList_json
     
     def getChatHistory(self, userID):
@@ -92,7 +92,7 @@ class MongoDBClient:
         if document == None:
             return None
         chatList = document["chat_history"]
-        chatList_json = json.dumps(chatList)
+        chatList_json = json.dumps(chatList, ensure_ascii=False)
         return chatList_json
     
     def getLatestSuggest(self, userID):
@@ -163,8 +163,8 @@ class MongoDBClient:
         self.updateUserDocument(userID, document)
     
     def updateGroupHistory(self, userID, groupID, message):
-        document = self.findByUserID(userID)
         groupDocument = self.findByGroupID(groupID)
+        document = self.findByUserID(userID)
         if groupDocument["owner"] == userID:
             document["groups"][groupID].append(
                 {
@@ -173,6 +173,7 @@ class MongoDBClient:
                 }
             )
         else:
+            document = self.findByUserID(groupDocument["owner"])
             document["groups"][groupID].append(
                 {
                     "role": "counterpart",
