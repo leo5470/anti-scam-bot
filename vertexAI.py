@@ -36,4 +36,4 @@ def query_vertexAI(system, user, temperature=1, max_output_tokens=8192, top_p=0.
       stream=False,
   )
 
-  print(response.text, end="")
+  return response.text
