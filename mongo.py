@@ -103,7 +103,10 @@ class MongoDBClient:
         self.collection.update_one({"user_id": userID}, {"$set": updated_document})
 
     def updateGroupDocument(self, groupID, updated_document):
-        self.collection.update_one({"group_id": groupID}, {"$set": updated_document})
+        self.groupCollection.update_one({"group_id": groupID}, {"$set": updated_document})
+
+    def updateSuggestDocument(self, userID, updated_document):
+        self.suggestCollection.update_one({"user_id": userID}, {"$set": updated_document})
     
     def insertGroup(self, groupID, groupName):
         document = self.findByGroupID(groupID)
@@ -181,6 +184,7 @@ class MongoDBClient:
     def updateSuggestHistory(self, userID, suggest):
         document = self.suggestCollection.find_one({"user_id": userID})
         document["history"].append(suggest)
+        self.updateSuggestDocument(userID, document)
 
     def setSuggestFlag(self, userID, boolean):
         document = self.findByUserID(userID)
