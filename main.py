@@ -44,8 +44,6 @@ binaryPrompt = Path('./prompts/binary.txt').read_text()
 qaPrompt = Path('./prompts/qa.txt').read_text()
 suggestPrompt = Path('./prompts/suggest.txt').read_text()
 
-suggestFlag = False
-
 @app.route("/callback", methods=['POST'])
 def callback():
     # get X-Line-Signature header value
@@ -132,8 +130,8 @@ def handle_message(event):
             ]
             template = CarouselTemplate(columns=columns)
             messages = [TemplateMessage(altText="Groups", template=template)]
-            suggestFlag = True
-        elif suggestFlag:
+            client.setSuggestFlag(userID, True)
+        elif client.getSuggestFlag(userID):
                 groupName = incomingMessage
                 history = client.getGroupHistory(groupName=groupName)
                 if history == None:
@@ -158,7 +156,7 @@ def handle_message(event):
                             ]
                         )
                     ]
-                suggestFlag = False
+                client.setSuggestFlag(userID, False)
         elif incomingMessage == "/提示詢問":
             suggest = client.getLatestSuggest(userID)
             client.updateChatHistory(userID, assistant=suggest)

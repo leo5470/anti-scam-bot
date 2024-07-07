@@ -30,9 +30,10 @@ class MongoDBClient:
         if document != None:
             return
         new_document = {
-        "user_id": userID,  # Replace with your desired id
-        "groups": {},
-        "chat_history": []
+            "user_id": userID,
+            "suggestFlag": False,
+            "groups": {},
+            "chat_history": []
         }
         new_suggest_document = {
             "user_id": userID,
@@ -53,6 +54,10 @@ class MongoDBClient:
     def findByGroupName(self, groupName):
         document = self.groupCollection.find_one({"group_name": groupName})
         return document
+    
+    def getSuggestFlag(self, userID):
+        document = self.findByUserID(userID)
+        return document["suggestFlag"]
     
     def getGroupOwner(self, groupID):
         document = self.groupCollection.find_one({"group_id": groupID})
@@ -172,6 +177,11 @@ class MongoDBClient:
     def updateSuggestHistory(self, userID, suggest):
         document = self.suggestCollection.find_one({"user_id": userID})
         document["history"].append(suggest)
+
+    def setSuggestFlag(self, userID, boolean):
+        document = self.findByUserID(userID)
+        document["suggestFlag"] = boolean
+        self.updateUserDocument(userID, document)
 
     def clearChatHistory(self, userID):
         document = self.findByUserID(userID)
