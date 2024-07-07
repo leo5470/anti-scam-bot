@@ -101,6 +101,9 @@ class MongoDBClient:
     
     def updateUserDocument(self, userID, updated_document):
         self.collection.update_one({"user_id": userID}, {"$set": updated_document})
+
+    def updateGroupDocument(self, groupID, updated_document):
+        self.collection.update_one({"group_id": groupID}, {"$set": updated_document})
     
     def insertGroup(self, groupID, groupName):
         document = self.findByGroupID(groupID)
@@ -122,7 +125,7 @@ class MongoDBClient:
             return False # 正常情況，當作每次進行進行一次(應急作法)
         groupDocument["initialized"] = True
         groupDocument["owner"] = userID
-        self.groupCollection.update_one({"groupID": groupID}, {"$set": groupDocument})
+        self.updateGroupDocument(groupID, groupDocument)
         document = self.collection.find_one({"user_id": userID})
         document["groups"].update(
             {
