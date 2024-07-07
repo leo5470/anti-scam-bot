@@ -25,14 +25,15 @@ SITCON Hackathon 2024 成果發表
         
 - 操作方式：
     - 環境設置
-       1. 先在LINE Developers 建立Providers 再來 Create a Messaging API channel，並且儲存等一下會用到的CHANNEL_ACCESS_TOKEN與CHANNEL_SECRERT。
-       2. 如圖所示，我們的部署工具Render，將先前建立好的token，填入環境變數中。
+       1. 先在LINE Developers 建立Providers -> Create a Messaging API channel，並且儲存等一下會用到的CHANNEL_ACCESS_TOKEN與CHANNEL_SECRERT。
+       2. （雲端部署）在Render或其他部署工具上，將先前建立好的token，連同其他環境變數，填入環境變數中。
         ![image](https://hackmd.io/_uploads/Bkih5jDvC.png)
+          （本地部署）將main.py中的dotenv部分取消註解，將環境變數填入.env後，配合ngrok或其他工具即可使用。
     - 使用者操作方式<br>
         - 使用方法1:
             - 加入LINE官方帳號即可開始進行問答。
         - 使用方法2:
-            - 先將官方帳號加入自己的群組，再將需要1對1對話的陌生人加進去。
+            - 先創立一個只有自己和機器人群組，再將需要1對1對話的陌生人加進去。
     
 ### 使用資源
 - 企業資源：
