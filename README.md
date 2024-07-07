@@ -22,18 +22,24 @@ SITCON Hackathon 2024 成果發表
     - 目標客群：
         - 一般民眾：此bot所針對的客群為一般民眾，藉由串接Vertex AI與民眾對話幫助一般民眾做到驗證、審核、思考，藉由簡單的按鍵以及system prompts的設定
         - Line平台：我們希望針對在台灣最大的聊天平台中作為主要的使用情境，使用者可能習慣藉由社群、群組以及1對1的聊天獲得各種資訊。在平台中，可能參雜真真假假的資訊，而使用者無法時刻了解，在聊天中利用bot增加一個防範的機制，杜絕由聊天引起的詐騙。
+### 試試看吧！
+Powered by Render.
+
+![image](https://github.com/leo5470/anti-scam-bot/assets/61446148/e204bce8-cb3e-4c98-a0ae-0a08857b4a8a)
+     
         
-- 操作方式：
-    - 環境設置
-       1. 先在LINE Developers 建立Providers -> Create a Messaging API channel，並且儲存等一下會用到的CHANNEL_ACCESS_TOKEN與CHANNEL_SECRERT。
-       2. （雲端部署）在Render或其他部署工具上，將先前建立好的token，連同其他環境變數，填入環境變數中。
-        ![image](https://hackmd.io/_uploads/Bkih5jDvC.png)
-          （本地部署）將main.py中的dotenv部分取消註解，將環境變數填入.env後，配合ngrok或其他工具即可使用。
-    - 使用者操作方式<br>
+### 如何部署
+- 環境設置
+  1. 先在LINE Developers 建立Providers -> Create a Messaging API channel，並且儲存等一下會用到的CHANNEL_ACCESS_TOKEN與CHANNEL_SECRERT。
+    2. （雲端部署）在Render或其他部署工具上，將先前建立好的token，連同其他環境變數，填入環境變數中。
+       ![image](https://hackmd.io/_uploads/Bkih5jDvC.png)
+       （本地部署）將main.py中的dotenv部分取消註解，將環境變數填入.env後，配合ngrok或其他工具即可使用。
+- 使用者操作方式<br>
         - 使用方法1:
             - 加入LINE官方帳號即可開始進行問答。
         - 使用方法2:
             - 先創立一個只有自己和機器人群組，再將需要1對1對話的陌生人加進去。
+
     
 ### 使用資源
 - 企業資源：
@@ -46,5 +52,9 @@ SITCON Hackathon 2024 成果發表
 <img src="https://github.com/leo5470/anti-scam-bot/assets/61446148/90eef9ff-4ca7-4e03-b41e-6fb4dd8e3f5e" alt="screenshot 2" width="200"/>
 <img src="https://github.com/leo5470/anti-scam-bot/assets/61446148/3dba7b9d-2f6f-427c-a65d-8abe04e78df1" alt="screenshot 3" width="200"/>
 
+### 待辦事項
+- [] 加入更多防呆機制
+- [] 更多的 Exception Handling 及 型別檢查
+- [] 將是/否的任務改為使用Gemini Flash 1.5
 
 
