@@ -62,6 +62,7 @@ class MongoDBClient:
     def getGroupOwner(self, groupID):
         document = self.groupCollection.find_one({"group_id": groupID})
         return document["owner"]
+
     
     def getGroupsInfo(self, userID):
         document = self.findByUserID(userID)
@@ -69,8 +70,8 @@ class MongoDBClient:
         infoList = []
         for key in group_keys:
             groupDocument = self.groupCollection.find_one({"group_id": key})
-            infoList.append({groupDocument["group_id"]: groupDocument["group_name"]})
-        return group_keys
+            infoList.append(groupDocument["group_name"])
+        return infoList
     
     def getGroupHistory(self, groupName=None, groupID=None):
         if groupName != None:

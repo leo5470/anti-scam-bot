@@ -92,7 +92,7 @@ def handle_message(event):
                 messages = [TextMessage(text="初始化成功")]
             else:
                 client.updateGroupHistory(userID, groupID, incomingMessage)
-                history = client.getGroupHistory(groupID=groupID)
+                history = client.getGroupHistory(groupID=groupID, groupName=None)
                 resp = query_vertexAI(binaryPrompt, history, temperature=0)
                 if resp == "是":
                     caution = "⚠️ 警告! 警告! 以上內容有點危險喔，可以點選選單內的”我該怎麼做”馬上了解下一步該做甚麼" # TODO: 警告訊息
@@ -104,12 +104,7 @@ def handle_message(event):
             
 
         elif incomingMessage == "/提示":
-            groupIDs = client.getGroupIDs(userID)
-            groupNames = []
-            for id in groupIDs:
-                group_summary = line_bot_api.get_group_summary(id).to_dict
-                name = group_summary["groupName"]
-                groupNames.append(name)
+            groupNames = client.getGroupsInfo(userID)
 
             columns = [
                 CarouselColumn(
@@ -143,7 +138,7 @@ def handle_message(event):
                     columns = [
                         CarouselColumn(
                             thumbnail_image_url='https://cdn.prod.website-files.com/6030eb20edb267a2d11d31f6/63bd0e73eda88718096a822c_ConceptsLINEGroupCoverImage_a76a181134deb7c405b39e6803a648c8_2000.png',
-                            text=name,
+                            text="有關於提示的任何問題，可以按下面的「進行提示詢問」開始詢問！",
                             default_action=MessageAction(
                                     label="進行提示詢問", # TODO: change
                                     text="/提示詢問"
@@ -159,13 +154,14 @@ def handle_message(event):
                 client.setSuggestFlag(userID, False)
         elif incomingMessage == "/提示詢問":
             suggest = client.getLatestSuggest(userID)
-            client.updateChatHistory(userID, assistant=suggest)
+            client.updateChatHistory(userID, user=None, assistant=suggest)
             ans = "請開始詢問"
             messages = [TextMessage(text=ans)]
         else:
-            client.updateChatHistory(userID, user=incomingMessage)
+            client.updateChatHistory(userID, user=incomingMessage, assistant=None)
             history = client.getChatHistory(userID)
             ans = query_vertexAI(qaPrompt, history)
+            client.updateChatHistory(userID, user=None, assistant=ans)
             messages = [TextMessage(text=ans)]
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
