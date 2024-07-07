@@ -53,8 +53,8 @@ Powered by Render.
 <img src="https://github.com/leo5470/anti-scam-bot/assets/61446148/3dba7b9d-2f6f-427c-a65d-8abe04e78df1" alt="screenshot 3" width="200"/>
 
 ### 待辦事項
-- [] 加入更多防呆機制
-- [] 更多的 Exception Handling 及 型別檢查
-- [] 將是/否的任務改為使用Gemini Flash 1.5
+- [ ] 加入更多防呆機制
+- [ ] 更多的 Exception Handling 及 型別檢查
+- [ ] 將是/否的任務改為使用Gemini Flash 1.5
 
 
