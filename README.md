@@ -39,4 +39,11 @@ SITCON Hackathon 2024 成果發表
     - 管理即時通訊應用程式的工具接口:LINE Messaging API<br>
     - 資料庫：MongoDB<br>
     - 部署工具：Render<br>
-    - 我們所選用的模型:Vertex AI<br>
+    - 選用模型:Vertex AI (Gemini Pro 1.5)<br>
+### 範例
+<img src="https://github.com/leo5470/anti-scam-bot/assets/61446148/a7f09a2f-d843-4837-a9e1-59a05a9e0857" alt="screenshot 1" width="200"/>
+<img src="https://github.com/leo5470/anti-scam-bot/assets/61446148/90eef9ff-4ca7-4e03-b41e-6fb4dd8e3f5e" alt="screenshot 2" width="200"/>
+<img src="https://github.com/leo5470/anti-scam-bot/assets/61446148/3dba7b9d-2f6f-427c-a65d-8abe04e78df1" alt="screenshot 3" width="200"/>
+
+
+
