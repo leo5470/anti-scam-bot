@@ -3,3 +3,6 @@ openai-env/
 .DS_Store
 *test.py
 test_json.py
+delta-exchange-420609-9642ec41f133.json
+test_vertexAI.py
+vertex_stream.py
